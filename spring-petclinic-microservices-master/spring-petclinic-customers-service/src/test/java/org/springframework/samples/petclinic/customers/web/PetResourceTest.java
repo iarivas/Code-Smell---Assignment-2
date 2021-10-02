@@ -42,7 +42,7 @@ class PetResourceTest {
     OwnerRepository ownerRepository;
 
     @Test
-    void shouldGetAPetInJSonFormat() throws Exception {
+    void shouldGetAPetInJSonFormat() {
 
         Pet pet = setupPet();
 

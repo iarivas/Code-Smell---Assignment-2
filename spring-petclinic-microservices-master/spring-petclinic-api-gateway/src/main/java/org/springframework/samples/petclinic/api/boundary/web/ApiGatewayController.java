@@ -39,9 +39,9 @@ import java.util.stream.Collectors;
 @RequestMapping("/api/gateway")
 public class ApiGatewayController {
 
-    private final CustomersServiceClient customersServiceClient;
+    private final CustomersServiceClient cstmServClient;
 
-    private final VisitsServiceClient visitsServiceClient;
+    private final VisitsServiceClient vistServClient;
 
     private final ReactiveCircuitBreakerFactory cbFactory;
 

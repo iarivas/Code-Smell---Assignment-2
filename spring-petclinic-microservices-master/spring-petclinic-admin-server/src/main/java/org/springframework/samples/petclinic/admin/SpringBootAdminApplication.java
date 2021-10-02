@@ -23,8 +23,8 @@ import org.springframework.cloud.client.discovery.EnableDiscoveryClient;
 @SpringBootApplication
 @EnableAdminServer
 @EnableDiscoveryClient
-public class SpringBootAdminApplication {
-    public static void main(String[] args) {
+public final class SpringBootAdminApplication {
+    public SpringBootAdminApplication(){
         SpringApplication.run(SpringBootAdminApplication.class, args);
     }
 
