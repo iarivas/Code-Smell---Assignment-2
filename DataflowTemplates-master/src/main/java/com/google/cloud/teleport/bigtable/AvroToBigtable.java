@@ -47,9 +47,9 @@ final class AvroToBigtable {
   private static final Logger LOG = LoggerFactory.getLogger(AvroToBigtable.class);
 
   /** Maximum number of mutations allowed per row by Cloud bigtable. */
-  private static final int MAX_MUTATIONS_PER_ROW = 100000;
+  private static final int MAX_MUTS_PER_ROW = 100000;
 
-  private static final Boolean DEFAULT_SPLIT_LARGE_ROWS = false;
+  private static final Boolean DEF_SPLIT_L_ROWS = false;
 
   /** Options for the import pipeline. */
   public interface Options extends PipelineOptions {
@@ -129,9 +129,9 @@ final class AvroToBigtable {
    * timestamp.
    */
   static class AvroToBigtableFn extends DoFn<BigtableRow, KV<ByteString, Iterable<Mutation>>> {
-    private final ValueProvider<Boolean> splitLargeRowsFlag;
+    private final ValueProvider<Boolean> splitLRowsFlag;
     private Boolean splitLargeRows;
-    private final int maxMutationsPerRow;
+    private final int maxMutsPerRow;
 
     public static AvroToBigtableFn create() {
       return new AvroToBigtableFn(StaticValueProvider.of(false), MAX_MUTATIONS_PER_ROW);

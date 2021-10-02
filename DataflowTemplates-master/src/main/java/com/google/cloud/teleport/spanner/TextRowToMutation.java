@@ -62,7 +62,6 @@ class TextRowToMutation extends DoFn<KV<String, String>, Mutation> {
   private final ValueProvider<String> dateFormat;
   private final ValueProvider<String> timestampFormat;
 
-  private Mutation.WriteBuilder writeBuilder = null;
 
   public TextRowToMutation(
       PCollectionView<Ddl> ddlView,
@@ -91,6 +90,7 @@ class TextRowToMutation extends DoFn<KV<String, String>, Mutation> {
      * Input string is one line but Apache CSVParser process multiple lines, so we only take the
      * first item in the result list
      */
+    Mutation.WriteBuilder writeBuilder = null;
     KV<String, String> kv = c.element();
     String tableName = kv.getKey();
     Ddl ddl = c.sideInput(ddlView);
