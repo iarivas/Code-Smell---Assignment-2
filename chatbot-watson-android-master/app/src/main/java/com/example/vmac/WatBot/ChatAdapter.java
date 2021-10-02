@@ -20,7 +20,7 @@ import java.util.ArrayList;
 public class ChatAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
 
     protected Activity activity;
-    private int SELF = 100;
+    private int chatAdapter_Self = 100;
     private ArrayList<Message> messageArrayList;
 
 
@@ -35,10 +35,10 @@ public class ChatAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
 
         // view type is to identify where to render the chat message
         // left or right
-        if (viewType == SELF) {
-            // self message
+        if (viewType == chatAdapter_Self) {
+            // chatAdapter_Self message
             itemView = LayoutInflater.from(parent.getContext())
-                    .inflate(R.layout.chat_item_self, parent, false);
+                    .inflate(R.layout.chatAdapter_Self, parent, false);
         } else {
             // WatBot message
             itemView = LayoutInflater.from(parent.getContext())
@@ -53,7 +53,7 @@ public class ChatAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
     public int getItemViewType(int position) {
         Message message = messageArrayList.get(position);
         if (message.getId() != null && message.getId().equals("1")) {
-            return SELF;
+            return chatAdapter_Self;
         }
 
         return position;
