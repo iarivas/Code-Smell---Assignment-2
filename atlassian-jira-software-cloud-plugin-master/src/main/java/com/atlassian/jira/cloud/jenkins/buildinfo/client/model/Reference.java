@@ -6,13 +6,13 @@ package com.atlassian.jira.cloud.jenkins.buildinfo.client.model;
  */
 public class Reference {
     private Commit commit;
-    private Ref ref;
+    private Reference ref;
 
     public Commit getCommit() {
         return commit;
     }
 
-    public Ref getRef() {
+    public Reference getRef() {
         return ref;
     }
 
@@ -21,7 +21,7 @@ public class Reference {
         return this;
     }
 
-    public Reference setRef(final Ref ref) {
+    public Reference setRef(final Reference ref) {
         this.ref = ref;
         return this;
     }

@@ -30,32 +30,44 @@ public final class JiraDeploymentInfo {
     private final Environment environment;
     private final List<Command> commands;
 
+    public class propertys{
+        Integer deploymentSequenceNumber;
+        Long updateSequenceNumber;
+        Set<Association> associations;
+        String displayName;
+        String url;
+        String description;
+        String lastUpdated;
+        String label;
+        String state;
+        Pipeline pipeline;
+        Environment environment;
+        List<Command> commands;
+        @JsonProperty("deploymentSequenceNumber") final Integer deploymentSequenceNumber;
+        @JsonProperty("updateSequenceNumber") final Long updateSequenceNumber;
+        @JsonProperty("associations") final Set<Association> associations;
+        @JsonProperty("displayName") final String displayName;
+        @JsonProperty("url") final String url;
+        @JsonProperty("description") final String description;
+        @JsonProperty("lastUpdated") final String lastUpdated;
+        @JsonProperty("label") final String label;
+        @JsonProperty("state") final String state;
+        @JsonProperty("pipeline") final Pipeline pipeline;
+        @JsonProperty("environment") final Environment environment;
+    }
     @JsonCreator
-    public JiraDeploymentInfo(
-            @JsonProperty("deploymentSequenceNumber") final Integer deploymentSequenceNumber,
-            @JsonProperty("updateSequenceNumber") final Long updateSequenceNumber,
-            @JsonProperty("associations") final Set<Association> associations,
-            @JsonProperty("displayName") final String displayName,
-            @JsonProperty("url") final String url,
-            @JsonProperty("description") final String description,
-            @JsonProperty("lastUpdated") final String lastUpdated,
-            @JsonProperty("label") final String label,
-            @JsonProperty("state") final String state,
-            @JsonProperty("pipeline") final Pipeline pipeline,
-            @JsonProperty("environment") final Environment environment,
-            @JsonInclude(JsonInclude.Include.NON_EMPTY) @JsonProperty("commands")
-                    final List<Command> commands) {
-        this.deploymentSequenceNumber = deploymentSequenceNumber;
-        this.updateSequenceNumber = updateSequenceNumber;
-        this.associations = associations;
-        this.displayName = displayName;
-        this.url = url;
-        this.description = description;
-        this.lastUpdated = lastUpdated;
-        this.label = label;
-        this.state = state;
-        this.pipeline = pipeline;
-        this.environment = environment;
+    public JiraDeploymentInfo(propertys temp, final List<Command> commands) {
+        this.deploymentSequenceNumber = temp.deploymentSequenceNumber;
+        this.updateSequenceNumber = temp.updateSequenceNumber;
+        this.associations = temp.associations;
+        this.displayName = temp.displayName;
+        this.url = temp.url;
+        this.description = temp.description;
+        this.lastUpdated = temp.lastUpdated;
+        this.label = temp.label;
+        this.state = temp.state;
+        this.pipeline = temp.pipeline;
+        this.environment = temp.environment;
         this.commands = commands;
     }
 
