@@ -193,81 +193,13 @@ public class IterableClasspath extends CloseableFilterableJavaFileObjectIterable
 							this.currentClasspathEntriesIndex++;
 						}
 						if (this.openArchiveEnumeration != null) {
-							while (!this.openArchiveEnumeration.isEmpty()) {
-								while (this.openArchiveEnumeration.peek()
-										.hasMoreElements()) {
-									ZipEntry entry = this.openArchiveEnumeration.peek()
-											.nextElement();
-									String entryName = entry.getName();
-									if (accept(entryName)) {
-										if (this.nestedZip != null) {
-											this.nextEntry = new NestedZipEntryJavaFileObject(
-													this.openFile, this.openArchive,
-													this.nestedZip, entry);
-										}
-										else {
-											this.nextEntry = new ZipEntryJavaFileObject(
-													this.openFile, this.openArchive,
-													entry);
-										}
-										return;
-									}
-									else if (this.nestedZip == null
-											&& entryName.startsWith(
-													MemoryBasedJavaFileManager.BOOT_PACKAGING_PREFIX_FOR_LIBRARIES)
-											&& entryName.endsWith(".jar")) {
-										// nested jar in uber jar
-										logger.debug("opening nested archive {}",
-												entry.getName());
-										ZipInputStream zis = new ZipInputStream(
-												this.openArchive.getInputStream(entry));
-										Enumeration<? extends ZipEntry> nestedZipEnumerator = new ZipEnumerator(
-												zis);
-										this.nestedZip = entry;
-										this.openArchiveEnumeration
-												.push(nestedZipEnumerator);
-									}
-								}
-								this.openArchiveEnumeration.pop();
-								if (this.nestedZip == null) {
-									this.openArchive = null;
-									this.openFile = null;
-								}
-								else {
-									this.nestedZip = null;
-								}
-							}
-							this.openArchiveEnumeration = null;
-							this.openArchive = null;
-							this.openFile = null;
+							findNext2();
 						}
 						else if (this.openDirectoryEnumeration != null) {
-							while (this.openDirectoryEnumeration.hasMoreElements()) {
-								File entry = this.openDirectoryEnumeration.nextElement();
-								String name = this.openDirectoryEnumeration
-										.getName(entry);
-								if (accept(name)) {
-									this.nextEntry = new DirEntryJavaFileObject(
-											this.openDirectoryEnumeration.getDirectory(),
-											entry);
-									return;
-								}
-							}
-							this.openDirectoryEnumeration = null;
-							this.openDirectory = null;
+							findNext3();
 						}
 						else if (this.openJrtEnumeration != null) {
-							while (this.openJrtEnumeration.hasMoreElements()) {
-								JrtEntryJavaFileObject jrtEntry = this.openJrtEnumeration
-										.nextElement();
-								String name = this.openJrtEnumeration.getName(jrtEntry);
-								if (accept(name)) {
-									this.nextEntry = jrtEntry;
-									return;
-								}
-							}
-							this.openJrtEnumeration = null;
-							this.openJrt = null;
+							findNext4();
 						}
 					}
 				}
@@ -276,6 +208,85 @@ public class IterableClasspath extends CloseableFilterableJavaFileObjectIterable
 							ioe);
 				}
 			}
+		}
+		private void findNext2(){
+			while (!this.openArchiveEnumeration.isEmpty()) {
+				while (this.openArchiveEnumeration.peek()
+					.hasMoreElements()) {
+					ZipEntry entry = this.openArchiveEnumeration.peek()
+						.nextElement();
+					String entryName = entry.getName();
+					if (accept(entryName)) {
+						if (this.nestedZip != null) {
+							this.nextEntry = new NestedZipEntryJavaFileObject(
+								this.openFile, this.openArchive,
+								this.nestedZip, entry);
+						}
+						else {
+							this.nextEntry = new ZipEntryJavaFileObject(
+								this.openFile, this.openArchive,
+								entry);
+						}
+						return;
+					}
+					else if (this.nestedZip == null
+						&& entryName.startsWith(
+						MemoryBasedJavaFileManager.BOOT_PACKAGING_PREFIX_FOR_LIBRARIES)
+						&& entryName.endsWith(".jar")) {
+						// nested jar in uber jar
+						logger.debug("opening nested archive {}",
+							entry.getName());
+						ZipInputStream zis = new ZipInputStream(
+							this.openArchive.getInputStream(entry));
+						Enumeration<? extends ZipEntry> nestedZipEnumerator = new ZipEnumerator(
+							zis);
+						this.nestedZip = entry;
+						this.openArchiveEnumeration
+							.push(nestedZipEnumerator);
+					}
+				}
+				this.openArchiveEnumeration.pop();
+				if (this.nestedZip == null) {
+					this.openArchive = null;
+					this.openFile = null;
+				}
+				else {
+					this.nestedZip = null;
+				}
+			}
+			this.openArchiveEnumeration = null;
+			this.openArchive = null;
+			this.openFile = null;
+		}
+
+		private void findNext3(){
+			while (this.openDirectoryEnumeration.hasMoreElements()) {
+				File entry = this.openDirectoryEnumeration.nextElement();
+				String name = this.openDirectoryEnumeration
+					.getName(entry);
+				if (accept(name)) {
+					this.nextEntry = new DirEntryJavaFileObject(
+						this.openDirectoryEnumeration.getDirectory(),
+						entry);
+					return;
+				}
+			}
+			this.openDirectoryEnumeration = null;
+			this.openDirectory = null;
+		}
+
+		private void findNext4(){
+			while (this.openJrtEnumeration.hasMoreElements()) {
+				JrtEntryJavaFileObject jrtEntry = this.openJrtEnumeration
+					.nextElement();
+				String name = this.openJrtEnumeration.getName(jrtEntry);
+				if (accept(name)) {
+					this.nextEntry = jrtEntry;
+					return;
+				}
+			}
+								this.openJrtEnumeration = null;
+								this.openJrt = null;
 		}
 
 		public boolean hasNext() {

@@ -44,6 +44,8 @@ import static org.assertj.core.api.Assertions.assertThat;
  */
 public class FunctionInvokerTests {
 
+	private static String consumerResult;
+
 	private FunctionInvoker<?, ?> handler = null;
 
 	<I, O> FunctionInvoker<I, O> handler(Class<?> config) {
@@ -134,7 +136,6 @@ public class FunctionInvokerTests {
 		assertThat(result.toString()).isEqualTo("[foo1, foo2]");
 	}
 
-	private static String consumerResult;
 
 	@Test
 	public void consumerNonFluxBean() {

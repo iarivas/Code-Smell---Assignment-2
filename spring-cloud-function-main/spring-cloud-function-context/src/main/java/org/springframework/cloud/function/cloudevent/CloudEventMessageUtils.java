@@ -48,27 +48,6 @@ import org.springframework.util.StringUtils;
  */
 public final class CloudEventMessageUtils {
 
-	private static final ContentTypeResolver contentTypeResolver = new DefaultContentTypeResolver() {
-
-		@Override
-		public MimeType resolve(@Nullable MessageHeaders headers) {
-			if (headers.containsKey("content-type")) { // this is temporary workaround for RSocket
-				return MimeType.valueOf(headers.get("content-type").toString());
-			}
-			return super.resolve(headers);
-		}
-
-	};
-
-	private static Field MESSAGE_HEADERS = ReflectionUtils.findField(MessageHeaders.class, "headers");
-
-	static {
-		MESSAGE_HEADERS.setAccessible(true);
-	}
-
-	private CloudEventMessageUtils() {
-	}
-
 	//=========== INTERNAL USE ONLY ==
 	static String _DATA = "data";
 
@@ -90,6 +69,29 @@ public final class CloudEventMessageUtils {
 
 	static String _TIME = "time";
 	// ================================
+
+	private static final ContentTypeResolver contentTypeResolver = new DefaultContentTypeResolver() {
+
+		@Override
+		public MimeType resolve(@Nullable MessageHeaders headers) {
+			if (headers.containsKey("content-type")) { // this is temporary workaround for RSocket
+				return MimeType.valueOf(headers.get("content-type").toString());
+			}
+			return super.resolve(headers);
+		}
+
+	};
+
+	private static Field MESSAGE_HEADERS = ReflectionUtils.findField(MessageHeaders.class, "headers");
+
+	static {
+		MESSAGE_HEADERS.setAccessible(true);
+	}
+
+	private CloudEventMessageUtils() {
+	}
+
+
 
 	/**
 	 * String value of 'cloudevent'. Typically used as {@link MessageUtils#MESSAGE_TYPE}
